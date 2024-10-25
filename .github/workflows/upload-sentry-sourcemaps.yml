@@ -29,6 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps --include=dev
 
+      - name: Get name and version from package.json
+        shell: pwsh
+        run: |
+          $pkg = Get-Content package.json | ConvertFrom-Json
+          Add-Content -Path $env:GITHUB_ENV -Value "NAME=$($pkg.name)"
+          Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$($pkg.version)"
+
       - name: Build Electron app for Windows
         run: npm run build:electron:win --publish="never"
 
