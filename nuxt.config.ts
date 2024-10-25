@@ -22,4 +22,10 @@ export default defineNuxtConfig({
     sourceMap: false,
   },
   ssr: false,
+
+  runtimeConfig: {
+    public: {
+      sentryDsn: process.env.SENTRY_DSN,
+    },
+  },
 });
