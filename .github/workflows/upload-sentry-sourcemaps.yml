@@ -32,3 +32,21 @@ jobs:
 
       - name: Check for source maps
         run: find .output/ -name "*.map" || echo "No source maps found"
+
+      - name: Upload Windows Executable as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows Executable
+          path: ./release/${{ env.VERSION }}/${{ env.NAME }}-${{ env.VERSION }}.exe
+
+      - name: Upload Windows Blockmap as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows Blockmap
+          path: ./release/${{ env.VERSION }}/${{ env.NAME }}-${{ env.VERSION }}.exe.blockmap
+
+      - name: Upload Windows latest.yml as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows latest.yml
+          path: ./release/${{ env.VERSION }}/latest.yml
