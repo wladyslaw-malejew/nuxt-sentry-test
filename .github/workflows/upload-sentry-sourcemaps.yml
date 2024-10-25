@@ -8,51 +8,42 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
-    env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      SENTRY_AUTH: ${{ secrets.SENTRY_AUTH }}
-      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      NODE_ENV: production
+  build-macos:
+    runs-on: macos-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps --include=dev
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install dmg-license
+        run: npm i dmg-license
+
+      - name: Install jq
+        run: brew install jq
 
       - name: Get name and version from package.json
-        shell: pwsh
         run: |
-          $pkg = Get-Content package.json | ConvertFrom-Json
-          Add-Content -Path $env:GITHUB_ENV -Value "NAME=$($pkg.name)"
-          Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$($pkg.version)"
+          echo "NAME=$(jq -r '.name' package.json)" >> $GITHUB_ENV
+          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
 
-      - name: Build Electron app for Windows
-        run: npm run build:electron:win --publish="never"
+      - name: Build Electron App for macOS
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_AUTH: ${{ secrets.SENTRY_AUTH }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          NODE_ENV: production
+        run: npm run build:electron:mac
 
-      - name: Upload Windows Executable as Artifact
+      - name: Upload macOS DMG as Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Windows Executable
-          path: ./release/${{ env.VERSION }}/${{ env.NAME }}-${{ env.VERSION }}.exe
-
-      - name: Upload Windows Blockmap as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows Blockmap
-          path: ./release/${{ env.VERSION }}/${{ env.NAME }}-${{ env.VERSION }}.exe.blockmap
-
-      - name: Upload Windows latest.yml as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows latest.yml
-          path: ./release/${{ env.VERSION }}/latest.yml
+          name: macOS DMG
+  path: ./release/${{ env.VERSION }}/${{ env.NAME }}-${{ env.VERSION }}.dmg
