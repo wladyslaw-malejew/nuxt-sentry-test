@@ -29,10 +29,7 @@ jobs:
         run: npm install --legacy-peer-deps --include=dev
 
       - name: Build Electron app for Windows
-        run: npm run build:electron:win --publish=never
-
-      - name: Check for source maps
-        run: find .output/ -name "*.map" || echo "No source maps found"
+        run: npm run build:electron:win --publish="never"
 
       - name: Upload Windows Executable as Artifact
         uses: actions/upload-artifact@v4
