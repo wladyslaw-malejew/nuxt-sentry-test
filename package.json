@@ -12,8 +12,7 @@
     "build:electron:mac:nosign": "nuxt generate && electron-builder --mac --config -c.mac.identity=null",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "preview": "nuxt preview"
   },
   "devDependencies": {
     "electron": "^24.8.8",
