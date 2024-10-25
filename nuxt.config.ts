@@ -47,9 +47,6 @@ export default defineNuxtConfig({
       hashMode: true,
     },
   },
-  typescript: {
-    shim: false,
-  },
   // css: {
   //   preprocessorOptions: {
   //     scss: {
@@ -75,12 +72,15 @@ export default defineNuxtConfig({
       },
     ],
   },
-  experimental: {
-    appManifest: false,
+  typescript: {
+    shim: false,
   },
+  // experimental: {
+  //   appManifest: false,
+  // },
   vite: {
     build: {
-      sourcemap: "hidden",
+      sourcemap: true,
       // rollupOptions: {
       //   onwarn(warning, warn) {
       //     // Suppress specific warnings containing '??'
@@ -109,7 +109,7 @@ export default defineNuxtConfig({
     },
   },
   sourcemap: true,
-  ssr: false,
+  ssr: true,
 
   runtimeConfig: {
     public: {
