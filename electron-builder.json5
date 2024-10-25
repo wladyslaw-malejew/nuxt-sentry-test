@@ -1,0 +1,39 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  appId: "com.nuxt.SentryTest",
+  asar: true,
+  directories: {
+    output: "release/${version}",
+  },
+  files: [".output/**/*", "dist-electron"],
+  mac: {
+    target: ["dmg"],
+    icon: "public/icon.icns",
+    artifactName: "${name}-${version}.${ext}",
+  },
+  win: {
+    target: [
+      {
+        target: "nsis",
+        arch: ["x64"],
+      },
+    ],
+    icon: "public/icon.ico",
+    artifactName: "${name}-${version}.${ext}",
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+  // extraResources: [
+  //   {
+  //     from: "jaffle-nitro/.output",
+  //     to: "jaffle-nitro",
+  //     filter: ["**/*"],
+  //   },
+  // ],
+}

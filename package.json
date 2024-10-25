@@ -2,12 +2,29 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
+  "main": "dist-electron/main.js",
+  "version": "0.0.1",
   "scripts": {
     "build": "nuxt build",
+    "build:electron": "nuxt generate && electron-builder",
+    "build:electron:win": "nuxt generate && electron-builder --win",
+    "build:electron:mac": "nuxt generate && electron-builder --mac",
+    "build:electron:mac:nosign": "nuxt generate && electron-builder --mac --config -c.mac.identity=null",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "electron": "^24.8.8",
+    "electron-builder": "^24.12.0",
+    "nuxt-electron": "^0.7.0",
+    "vite-electron-plugin": "^0.8.2",
+    "vite-plugin-electron": "^0.28.2",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "sass": "^1.56.1",
+    "typescript": "^4.9.3",
+    "@sentry/electron": "^5.4.0"
   },
   "dependencies": {
     "@sentry/nuxt": "^8.35.0",
