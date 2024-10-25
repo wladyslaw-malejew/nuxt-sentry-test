@@ -13,9 +13,41 @@ export default defineNuxtConfig({
     },
   },
   sourcemap: true,
+  router: {
+    options: {
+      hashMode: true,
+    },
+  },
+  typescript: {
+    shim: false,
+  },
+  // electron: {
+  //   disableDefaultOptions: true,
+  //   build: [
+  //     {
+  //       entry: "electron/main.ts",
+  //       vite: viteElectronBuildConfig,
+  //     },
+  //     {
+  //       entry: "electron/preload.ts",
+  //       onstart(args) {
+  //         // Notify the Renderer-Process to reload the page when the Preload-Scripts build is complete,
+  //         // instead of restarting the entire Electron App.
+  //         args.reload();
+  //       },
+  //       vite: viteElectronBuildConfig,
+  //     },
+  //   ],
+  // },
+  experimental: {
+    appManifest: false,
+  },
   vite: {
     build: {
       sourcemap: "hidden",
+    },
+    server: {
+      middlewareMode: false,
     },
   },
   nitro: {
