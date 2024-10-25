@@ -27,8 +27,8 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps --include=dev
 
-      - name: Generate static assets
-        run: npm run generate
+      - name: Build Electron app for Windows
+        run: npm run build:electron:win
 
       - name: Check for source maps
         run: find .output/ -name "*.map" || echo "No source maps found"
