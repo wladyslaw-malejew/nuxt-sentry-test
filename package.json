@@ -1,7 +1,6 @@
 {
   "name": "nuxt-app",
   "private": true,
-  "type": "module",
   "main": "dist-electron/main.js",
   "version": "0.0.1",
   "scripts": {
@@ -10,6 +9,7 @@
     "build:electron:win": "nuxt generate && electron-builder --win",
     "build:electron:mac": "nuxt generate && electron-builder --mac",
     "build:electron:mac:nosign": "nuxt generate && electron-builder --mac --config -c.mac.identity=null",
+    "electron:build": "electron-builder",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview"
