@@ -27,7 +27,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   modules: [
-    "@sentry/nuxt/module",
+    // "@sentry/nuxt/module",
     (options, nuxt) => {
       if (!nuxt.options.dev) {
         nuxt.options.nitro.runtimeConfig ??= {};
@@ -79,37 +79,37 @@ export default defineNuxtConfig({
   //   appManifest: false,
   // },
   vite: {
-    build: {
-      sourcemap: true,
-      // rollupOptions: {
-      //   onwarn(warning, warn) {
-      //     // Suppress specific warnings containing '??'
-      //     if (warning.message.includes("??")) {
-      //       return;
-      //     }
-      //     // Handle all other warnings
-      //     warn(warning);
-      //   },
-      // },
-    },
+    // build: {
+    //   // sourcemap: true,
+    //   // rollupOptions: {
+    //   //   onwarn(warning, warn) {
+    //   //     // Suppress specific warnings containing '??'
+    //   //     if (warning.message.includes("??")) {
+    //   //       return;
+    //   //     }
+    //   //     // Handle all other warnings
+    //   //     warn(warning);
+    //   //   },
+    //   // },
+    // },
     server: {
       middlewareMode: false,
     },
   },
-  nitro: {
-    sourceMap: false,
-  },
-  sentry: {
-    sourceMapsUploadOptions: {
-      enabled: true,
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      authToken: process.env.SENTRY_AUTH,
-      telemetry: false,
-    },
-  },
-  sourcemap: true,
-  ssr: true,
+  // nitro: {
+  //   sourceMap: false,
+  // },
+  // sentry: {
+  //   sourceMapsUploadOptions: {
+  //     enabled: true,
+  //     org: process.env.SENTRY_ORG,
+  //     project: process.env.SENTRY_PROJECT,
+  //     authToken: process.env.SENTRY_AUTH,
+  //     telemetry: false,
+  //   },
+  // },
+  // sourcemap: true,
+  ssr: false,
 
   runtimeConfig: {
     public: {
