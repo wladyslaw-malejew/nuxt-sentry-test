@@ -1,6 +1,6 @@
 import { release } from "os";
 import path from "path";
-import { BrowserWindow, app, shell } from "electron";
+import { BrowserWindow, app, ipcMain, shell } from "electron";
 
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true";
 
@@ -38,22 +38,9 @@ async function createWindow() {
     win.loadURL(process.env.VITE_DEV_SERVER_URL!);
   }
 
-  // Ensure zoom factor consistency across events
-  function applyZoomFactor() {
-    if (win) {
-      win.webContents.setZoomFactor(currentZoomFactor);
-      console.log(`Zoom factor applied: ${currentZoomFactor}`);
-    }
-  }
-
   // Prevent zoom level changes during resize
-  let resizeTimeout: NodeJS.Timeout;
   win.on("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      console.log("Window resized");
-      applyZoomFactor(); // Reapply zoom factor after resizing
-    }, 200); // Debounce resize event
+    applyZoomFactor();
   });
 
   // Handle navigation events to ensure zoom is reapplied
@@ -67,19 +54,6 @@ async function createWindow() {
     applyZoomFactor();
   });
 
-  // Handle zoom changes triggered by user (e.g., Cmd+Plus, Ctrl+Plus)
-  win.webContents.on("zoom-changed", (event, zoomDirection) => {
-    if (zoomDirection === "in") {
-      currentZoomFactor = Math.min(currentZoomFactor + 0.1, 3); // Max zoom limit
-    } else if (zoomDirection === "out") {
-      currentZoomFactor = Math.max(currentZoomFactor - 0.1, 0.5); // Min zoom limit
-    }
-    console.log(
-      `Zoom changed: ${zoomDirection}, New Zoom Factor: ${currentZoomFactor}`
-    );
-    applyZoomFactor();
-  });
-
   // Disable pinch-to-zoom gestures
   win.webContents.setVisualZoomLevelLimits(1, 1);
 
@@ -89,6 +63,53 @@ async function createWindow() {
     return { action: "deny" };
   });
 }
+
+// Ensure zoom factor consistency across events
+function applyZoomFactor() {
+  if (win) {
+    win.webContents.setZoomFactor(currentZoomFactor);
+    console.log(`Zoom factor applied: ${currentZoomFactor}`);
+  }
+}
+
+ipcMain.handle("electron-controls", (event, payload) => {
+  switch (payload.action) {
+    case "zoom-in":
+      currentZoomFactor = Math.min(currentZoomFactor + 0.1, 3);
+
+      applyZoomFactor();
+
+      console.log(`Zoom changed: IN, New Zoom Factor: ${currentZoomFactor}`);
+
+      break;
+    case "zoom-out":
+      currentZoomFactor = Math.max(currentZoomFactor - 0.1, 0.5);
+
+      applyZoomFactor();
+
+      console.log(`Zoom changed: OUT, New Zoom Factor: ${currentZoomFactor}`);
+
+      break;
+    case "zoom-reset":
+      currentZoomFactor = 1;
+
+      applyZoomFactor();
+
+      console.log(`Zoom reset to default: 1`);
+
+      break;
+    case "zoom-set":
+      // win?.webContents.setZoomFactor(+payload.zoomFactor || 1);
+
+      currentZoomFactor = +payload.zoomFactor || 1;
+
+      applyZoomFactor();
+
+      console.log(`Zoom set to: ${currentZoomFactor}`);
+
+      break;
+  }
+});
 
 app.on("window-all-closed", () => {
   win = null;
